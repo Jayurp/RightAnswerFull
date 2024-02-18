@@ -1,0 +1,37 @@
+newOrder:
+
+{
+  "table":"2",
+  "year":"2023",
+  "month":"09",
+  "date":"23",
+  "hour":"12",
+  "minute":"20",
+  "second":"30",
+  "total_price":500,
+  "total_quantity":4,
+  "read":false,
+  "approved":false,
+  "orderItems":{
+    "noodle":{
+      "item":"noode",
+      "quantity":2,
+      "price":200
+    },
+    "pasta":{
+      "item":"pasta",
+      "quantity":2,
+      "price":300
+    }
+    }
+  }
+editMenu:
+
+{
+  "name":"Pizza",
+  "parent_category":"Italian",
+  "description":"Pizza it is",
+  "image_link":"link here",
+  "branch_name":"vadodara",
+  "price":250
+}
