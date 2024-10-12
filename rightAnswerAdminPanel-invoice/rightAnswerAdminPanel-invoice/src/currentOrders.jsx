@@ -44,8 +44,7 @@ function CurrentOrders() {
     setIndex(index);
     setTableNumber(newOrderData[index].table);
     let arr = [];
-    for(let key in newOrderData[index].orderItems)
-    {
+    for (let key in newOrderData[index].orderItems) {
       arr.push(newOrderData[index].orderItems[key]);
     }
     setPopUpArray(arr);
@@ -96,10 +95,9 @@ function CurrentOrders() {
         return response.json();
       })
       .then((data) => {
-        let arr = data[1]
+        let arr = data[1];
         let temp = [];
-        for(let key in data)
-        {
+        for (let key in data) {
           temp.push(data[key]);
         }
         setNewOrderData(temp);
@@ -168,7 +166,7 @@ function CurrentOrders() {
               aria-describedby="alert-dialog-description"
             >
               <DialogTitle id="alert-dialog-title">
-                Table Number: { tableNumber }
+                Table Number: {tableNumber}
               </DialogTitle>
               <DialogContent>
                 <TableContainer>

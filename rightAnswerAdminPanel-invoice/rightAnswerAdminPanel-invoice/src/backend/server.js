@@ -144,7 +144,7 @@ app.get("/getNewOrders", (req, res) => {
   get(child(starCountRef, "orders/newOrders"))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val())
+        console.log(snapshot.val());
         res.status(200).send(snapshot.val());
       } else {
         console.log("post");
@@ -172,16 +172,18 @@ app.get("/getCurrentOrders", (req, res) => {
 
 app.post("/getPastOrders", (req, res) => {
   const starCountRef = ref(db);
-  console.log("orders/pastOrders/" + req.body.year + "/" + req.body.month + "/" + req.body.date)
-  get(
-    child(
-      starCountRef,
-      "orders/pastOrders/" + req.body.year
-    )
-  )
+  console.log(
+    "orders/pastOrders/" +
+      req.body.year +
+      "/" +
+      req.body.month +
+      "/" +
+      req.body.date
+  );
+  get(child(starCountRef, "orders/pastOrders/" + req.body.year))
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val())
+        console.log(snapshot.val());
         res.status(200).send(snapshot.val());
       } else {
         console.log("post");
@@ -204,10 +206,9 @@ app.post("/acceptOrder", (req, res) => {
       }
     })
     .then((snap) => {
-      update(
-        ref(db, "orders/currentOrders/" + "/" + snap.key),
-        { key: snap.key }
-      ).catch((error) => {
+      update(ref(db, "orders/currentOrders/" + "/" + snap.key), {
+        key: snap.key,
+      }).catch((error) => {
         if (error == null) {
           console.log("Fine");
         } else {
@@ -220,19 +221,10 @@ app.post("/acceptOrder", (req, res) => {
 });
 
 app.post("/doneOrder", (req, res) => {
-  set(
-    ref(db, "orders/currentOrders/" + req.body.key),
-    null
-  );
+  set(ref(db, "orders/currentOrders/" + req.body.key), null);
 
   push(
-    ref(
-      db,
-      "orders/pastOrders/" +
-        req.body.year +
-        "/" +
-        req.body.month
-    ),
+    ref(db, "orders/pastOrders/" + req.body.year + "/" + req.body.month),
     req.body
   )
     .catch((error) => {
