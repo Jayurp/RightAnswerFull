@@ -23,6 +23,7 @@ function CurrentOrders() {
   const [open, setOpen] = React.useState(false);
   const [taxedRate, setTaxedRate] = useState([]);
   const [Index, setIndex] = useState();
+  const [tableNumber, setTableNumber] = useState();
   var insideData = [];
   const [isChecked, setIsChecked] = useState(false);
   const [refreshCount, setRefreshCount] = useState(0);
@@ -41,10 +42,13 @@ function CurrentOrders() {
 
   const handleClickOpen = (index) => {
     setIndex(index);
-    Object.keys(newOrderData[index]["orderItems"]).forEach((key) => {
-      insideData.push(newOrderData[index]["orderItems"][key]);
-    });
-    setPopUpArray(insideData);
+    setTableNumber(newOrderData[index].table);
+    let arr = [];
+    for(let key in newOrderData[index].orderItems)
+    {
+      arr.push(newOrderData[index].orderItems[key]);
+    }
+    setPopUpArray(arr);
     setTaxedRate(
       newOrderData[index]["total_price"] +
         newOrderData[index]["total_price"] * 0.05
@@ -92,21 +96,28 @@ function CurrentOrders() {
         return response.json();
       })
       .then((data) => {
-        var temp_order = [];
-        var temp_itemData = [];
-        var temp_totalAmount = [];
-        Object.keys(data).forEach((key) => {
-          Object.keys(data[key]).forEach((key2) => {
-            temp_order.push(data[key][key2]);
-            Object.keys(data[key][key2]).forEach((key3) => {
-              if (key3 == "orderItems") {
-                temp_itemData.push(data[key][key2][key3]);
-              }
-            });
-          });
-        });
-        setNewOrderData(temp_order);
-        setItemData(temp_itemData);
+        let arr = data[1]
+        let temp = [];
+        for(let key in data)
+        {
+          temp.push(data[key]);
+        }
+        setNewOrderData(temp);
+        // var temp_order = [];
+        // var temp_itemData = [];
+        // var temp_totalAmount = [];
+        // Object.keys(data).forEach((key) => {
+        //   Object.keys(data[key]).forEach((key2) => {
+        //     temp_order.push(data[key][key2]);
+        //     Object.keys(data[key][key2]).forEach((key3) => {
+        //       if (key3 == "orderItems") {
+        //         temp_itemData.push(data[key][key2][key3]);
+        //       }
+        //     });
+        //   });
+        // });
+        // setNewOrderData(temp_order);
+        // setItemData(temp_itemData);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -157,7 +168,7 @@ function CurrentOrders() {
               aria-describedby="alert-dialog-description"
             >
               <DialogTitle id="alert-dialog-title">
-                Table Number: {OrderData.table}
+                Table Number: { tableNumber }
               </DialogTitle>
               <DialogContent>
                 <TableContainer>
@@ -173,7 +184,7 @@ function CurrentOrders() {
                       {popUpArray.map((PopUpArray) => (
                         <>
                           <TableRow key={PopUpArray.item}>
-                            <TableCell>{PopUpArray.item}</TableCell>
+                            <TableCell>{PopUpArray.itemName}</TableCell>
                             <TableCell align="right">
                               {PopUpArray.quantity}
                             </TableCell>

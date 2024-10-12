@@ -82,7 +82,7 @@ app.post("/editMenu", (req, res) => {
 });
 
 app.post("/newOrder", (req, res) => {
-  push(ref(db, "orders/newOrders/" + req.body.table), req.body)
+  push(ref(db, "orders/newOrders/"), req.body)
     .catch((error) => {
       if (error == null) {
         console.log("Fine");
@@ -91,7 +91,7 @@ app.post("/newOrder", (req, res) => {
       }
     })
     .then((snap) => {
-      update(ref(db, "orders/newOrders/" + req.body.table + "/" + snap.key), {
+      update(ref(db, "orders/newOrders/" + snap.key), {
         key: snap.key,
       }).catch((error) => {
         if (error == null) {
@@ -124,7 +124,7 @@ app.post("/getOrderData", (req, res) => {
   get(
     child(
       starCountRef,
-      req.body.branch_name + "/order_data/2023/" + req.body.month
+      req.body.branch_name + "/order_data/2024/" + req.body.month
     )
   )
     .then((snapshot) => {
@@ -144,6 +144,7 @@ app.get("/getNewOrders", (req, res) => {
   get(child(starCountRef, "orders/newOrders"))
     .then((snapshot) => {
       if (snapshot.exists()) {
+        console.log(snapshot.val())
         res.status(200).send(snapshot.val());
       } else {
         console.log("post");
@@ -171,14 +172,16 @@ app.get("/getCurrentOrders", (req, res) => {
 
 app.post("/getPastOrders", (req, res) => {
   const starCountRef = ref(db);
+  console.log("orders/pastOrders/" + req.body.year + "/" + req.body.month + "/" + req.body.date)
   get(
     child(
       starCountRef,
-      "orders/pastOrders/" + req.body.year + "/" + req.body.month
+      "orders/pastOrders/" + req.body.year
     )
   )
     .then((snapshot) => {
       if (snapshot.exists()) {
+        console.log(snapshot.val())
         res.status(200).send(snapshot.val());
       } else {
         console.log("post");
@@ -192,7 +195,7 @@ app.post("/getPastOrders", (req, res) => {
 app.post("/acceptOrder", (req, res) => {
   removeOrder(req.body.table, req.body.key);
 
-  push(ref(db, "orders/currentOrders/" + req.body.table), req.body)
+  push(ref(db, "orders/currentOrders/"), req.body)
     .catch((error) => {
       if (error == null) {
         console.log("Fine");
@@ -202,7 +205,7 @@ app.post("/acceptOrder", (req, res) => {
     })
     .then((snap) => {
       update(
-        ref(db, "orders/currentOrders/" + req.body.table + "/" + snap.key),
+        ref(db, "orders/currentOrders/" + "/" + snap.key),
         { key: snap.key }
       ).catch((error) => {
         if (error == null) {
@@ -218,7 +221,7 @@ app.post("/acceptOrder", (req, res) => {
 
 app.post("/doneOrder", (req, res) => {
   set(
-    ref(db, "orders/currentOrders/" + req.body.table + "/" + req.body.key),
+    ref(db, "orders/currentOrders/" + req.body.key),
     null
   );
 
@@ -228,9 +231,7 @@ app.post("/doneOrder", (req, res) => {
       "orders/pastOrders/" +
         req.body.year +
         "/" +
-        req.body.month +
-        "/" +
-        req.body.date
+        req.body.month
     ),
     req.body
   )
@@ -249,8 +250,6 @@ app.post("/doneOrder", (req, res) => {
             req.body.year +
             "/" +
             req.body.month +
-            "/" +
-            req.body.date +
             "/" +
             snap.key
         ),
@@ -376,7 +375,7 @@ function updateOrderData(data) {
 }
 
 function removeOrder(table, key) {
-  set(ref(db, "orders/newOrders/" + table + "/" + key), null);
+  set(ref(db, "orders/newOrders/" + key), null);
 }
 
 app.get("/getinvoice", (req, res) => {
