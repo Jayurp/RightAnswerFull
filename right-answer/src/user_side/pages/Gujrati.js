@@ -10,6 +10,7 @@ import {
   Typography,
   Button, // Import Button from @mui/material
 } from "@mui/material";
+import { useParams } from 'react-router-dom';
 
 const Gujrati = () => {
 
@@ -24,13 +25,14 @@ const Gujrati = () => {
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
+  const { id } = useParams();
 
 
   const handleOrderClick = (itemName, itemPrice) => {
     fetch('http://localhost:4000/newOrder', {
       method: 'POST',
       body: JSON.stringify({
-        "table":"2",
+        "table":id,
         "year":currentYear.toString(),
         "month":(currentMonth+1).toString(),
         "date":date.toString(),

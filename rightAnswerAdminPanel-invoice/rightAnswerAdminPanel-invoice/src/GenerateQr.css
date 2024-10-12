@@ -1,0 +1,38 @@
+.empty {
+    min-width: 100%;
+    min-height: 100%;
+    margin-left: 25rem;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 15rem;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+}
+
+.qrParent {
+    min-height: 1000%;
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.tableSelect {
+    height: 2rem;
+    width: 5rem;
+    margin: 2rem;
+}
+
+.downloadButton {
+    height: 2rem;
+    width: 10rem;
+    margin: 2rem;
+    padding: 1rem;
+}
