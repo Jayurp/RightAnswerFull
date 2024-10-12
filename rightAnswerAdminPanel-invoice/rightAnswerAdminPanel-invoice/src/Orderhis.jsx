@@ -23,10 +23,12 @@ function Orderhis() {
   const [open, setOpen] = React.useState(false);
   const [taxedRate, setTaxedRate] = useState([]);
   const [Index, setIndex] = useState();
+  const [tableNumber, setTableNumber] = useState();
   var insideData = [];
 
   const handleClickOpen = (index) => {
     setIndex(index);
+    setTableNumber(newOrderData[index].table)
     Object.keys(newOrderData[index]["orderItems"]).forEach((key) => {
       insideData.push(newOrderData[index]["orderItems"][key]);
     });
@@ -75,7 +77,7 @@ function Orderhis() {
       method: "POST",
       body: JSON.stringify({
         month: "10",
-        year: "2023",
+        year: "2024",
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -88,22 +90,15 @@ function Orderhis() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        var temp_order = [];
-        var temp_itemData = [];
-        var temp_totalAmount = [];
-        Object.keys(data).forEach((key) => {
-          Object.keys(data[key]).forEach((key2) => {
-            temp_order.push(data[key][key2]);
-            Object.keys(data[key][key2]).forEach((key3) => {
-              if (key3 == "orderItems") {
-                temp_itemData.push(data[key][key2][key3]);
-              }
-            });
-          });
-        });
-        setNewOrderData(temp_order);
-        setItemData(temp_itemData);
+        let arr = [];
+        for(let month in data)
+        {
+          for(let key in data[month])
+          {
+            arr.push(data[month][key]);
+          }
+        }
+        setNewOrderData(arr);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -150,7 +145,7 @@ function Orderhis() {
               aria-describedby="alert-dialog-description"
             >
               <DialogTitle id="alert-dialog-title">
-                Table Number: {OrderData.table}
+                Table Number: {tableNumber}
               </DialogTitle>
               <DialogContent>
                 <TableContainer>
@@ -166,7 +161,7 @@ function Orderhis() {
                       {popUpArray.map((PopUpArray) => (
                         <>
                           <TableRow key={PopUpArray.item}>
-                            <TableCell>{PopUpArray.item}</TableCell>
+                            <TableCell>{PopUpArray.itemName}</TableCell>
                             <TableCell align="right">
                               {PopUpArray.quantity}
                             </TableCell>

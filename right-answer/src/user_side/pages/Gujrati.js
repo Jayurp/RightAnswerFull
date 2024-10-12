@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { MenuList } from "../data/data";
 import Layout from "../Layout/Layout";
 import {
   Box,
@@ -11,6 +10,7 @@ import {
   Button, // Import Button from @mui/material
 } from "@mui/material";
 import { useParams } from 'react-router-dom';
+import QuantityInput from "./QuantityInput";
 
 const Gujrati = () => {
 
@@ -27,8 +27,9 @@ const Gujrati = () => {
   ];
   const { id } = useParams();
 
+  const [cartItems, setCartItems] = useState({});
 
-  const handleOrderClick = (itemName, itemPrice) => {
+  const createCart = async () => {
     fetch('http://localhost:4000/newOrder', {
       method: 'POST',
       body: JSON.stringify({
@@ -39,17 +40,18 @@ const Gujrati = () => {
         "hour":currentHour.toString(),
         "minute":currentMinute.toString(),
         "second":curretnSecond.toString(),
-        "total_price":itemPrice,
-        "total_quantity":1,
+        "total_price":countTotal(),
+        "total_quantity":countQuantity(),
         "read":false,
         "approved":false,
-        "orderItems":{
-          [itemName]:{
-            "item":itemName,
-            "quantity":1,
-            "price":itemPrice
-          }
-          }
+        // "orderItems":{
+        //   itemName:{
+        //     "item":itemName,
+        //     "quantity":1,
+        //     "price":itemPrice
+        //   }
+        //   }
+        "orderItems": cartItems
         }),
       headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -67,6 +69,43 @@ const Gujrati = () => {
           .catch(error => {
           console.error('Fetch error:', error);
           });
+  }
+
+  const countTotal = () => {
+    let total = 0;
+    for(let key in cartItems)
+    {
+      total += cartItems[key].price * cartItems[key].quantity;
+    }
+    return total;
+  }
+
+  const countQuantity = () => {
+    let quantity = 0;
+    for(let key in cartItems)
+    {
+      quantity += cartItems[key].quantity;
+    }
+    return quantity;
+  }
+
+  const handleOrderClick = (itemName, itemPrice) => {
+    let obj = cartItems;
+    if(obj[itemName])
+    {
+      obj[itemName].quantity = obj[itemName].quantity + 1;
+    }
+    else
+    {
+      obj[itemName] = {
+        "itemName": itemName,
+        "quantity": 1,
+        "price": itemPrice
+      }
+    }
+
+    setCartItems(obj);
+    console.log(obj)
   };
 
       const [MenuList , setMenuData] = useState([]);
@@ -105,6 +144,18 @@ const Gujrati = () => {
             });
       });
 
+      const handleQuantityChange = (newQuantity) => {
+        if(newQuantity.quantity > 0)
+          cartItems[newQuantity.itemName].quantity = newQuantity.quantity;
+        else
+          {
+            let obj = cartItems;
+            delete obj[newQuantity.itemName];
+            setCartItems(obj);
+          }
+        console.log(cartItems);
+      };
+
 
   return (
     <Layout>
@@ -126,14 +177,16 @@ const Gujrati = () => {
                   {menuItem.price} Rs
                 </Typography>
                 <Typography variant="body2">{menuItem.description}</Typography>
-                <Button onClick={() => handleOrderClick(menuItem.name, menuItem.price)} variant="contained" color="primary">
+                {!cartItems[menuItem.name] && <Button onClick={() => handleOrderClick(menuItem.name, menuItem.price)} variant="contained" color="primary">
                   Order Now
-                </Button>
+                </Button>}
+                {cartItems[menuItem.name] && <QuantityInput onQuantityChange={handleQuantityChange} itemName={menuItem.name}/>}
               </CardContent>
             </CardActionArea>
           </Card>
         ))}
       </Box>
+      <button onClick={createCart}>Send Order</button>
     </Layout>
   );
 };

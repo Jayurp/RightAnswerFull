@@ -44,12 +44,6 @@ function Sidebar() {
           </a>
         </li>
         <li className="sidebar-list-item">
-          <a href="">
-            <BsFiletypePdf className="icon" />
-            invoice
-          </a>
-        </li>
-        <li className="sidebar-list-item">
           <a href="/generate-qr-code">
             <BsQrCodeScan className="icon" />
             Generate QR Code
