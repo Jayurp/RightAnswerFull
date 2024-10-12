@@ -9,8 +9,8 @@ import Landing from './landing'
 import AddItem from './addItems'
 import TableOrder from './TableOrder'
 import Orderhistory from './Orderhistory'
+import GenerateQrCode from './GenerateQrCode'
 function App() {
-  
 
   return (
     <>
@@ -20,6 +20,7 @@ function App() {
     <Route exact path="addItem" element={<AddItem/>}/>
     <Route exact path="tableOrder" element={<TableOrder/>}/>
     <Route exact path="orderhistory" element={<Orderhistory/>}/>
+    <Route exact path="generate-qr-code" element={<GenerateQrCode/>}/>
     </Routes>
     </BrowserRouter>
     </>

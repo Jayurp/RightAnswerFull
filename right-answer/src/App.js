@@ -18,6 +18,7 @@ function App() {
       <Route exact path="reset" element={<Forgot/>}/>
       <Route path="/Home" element={<Home />} />
       <Route path="/Gujrati" element={<Gujrati/>} />
+      <Route path="/Gujrati/:id" element={<Gujrati />} />
     </Routes>
     </BrowserRouter>
     </>
