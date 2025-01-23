@@ -1,0 +1,9 @@
+<?php
+$n = 5; // Number of rows
+for ($i = 1; $i <= $n; $i++) {
+    for ($j = $n; $j >= $n - $i + 1; $j--) {
+        echo $j;
+    }
+    echo "\n";
+}
+?>
