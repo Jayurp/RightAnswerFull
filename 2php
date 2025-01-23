@@ -1,0 +1,17 @@
+<?php
+
+function pattern14($n) {
+  for ($i = 1; $i <= $n; $i++) {
+    for ($j = 1; $j <= $n - $i; $j++) {
+      echo " "; // Add spaces for alignment
+    }
+    for ($k = 1; $k <= $i; $k++) {
+      echo "*";
+    }
+    echo "\n";
+  }
+}
+
+pattern14(5); // Generates pattern 14 with 5 rows
+
+?>
