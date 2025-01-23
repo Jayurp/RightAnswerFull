@@ -1,29 +1,31 @@
 <?php
-$n = 5; // Number of rows (for the upper half of the diamond)
 
-// Upper half of the diamond
-for ($i = 1; $i <= $n; $i++) {
-    // Print leading spaces
-    for ($j = $n - $i; $j > 0; $j--) {
-        echo " ";
+// Function to generate the 14th pattern
+function generate_pattern_14() {
+    $pattern = "";
+
+    // Number of rows in the pattern
+    $rows = 15;
+
+    // Loop through each row
+    for ($i = 1; $i <= $rows; $i++) {
+        // Number of dots in the current row
+        $dots = ($i - 1) * 2;
+
+        // Add dots to the pattern
+        for ($j = 1; $j <= $dots; $j++) {
+            $pattern .= ".";
+        }
+
+        // Add a newline character after each row
+        $pattern .= "\n";
     }
-    // Print stars
-    for ($k = 1; $k <= (2 * $i - 1); $k++) {
-        echo "*";
-    }
-    echo "\n";
+
+    return $pattern;
 }
 
-// Lower half of the diamond
-for ($i = $n - 1; $i >= 1; $i--) {
-    // Print leading spaces
-    for ($j = $n - $i; $j > 0; $j--) {
-        echo " ";
-    }
-    // Print stars
-    for ($k = 1; $k <= (2 * $i - 1); $k++) {
-        echo "*";
-    }
-    echo "\n";
-}
+// Print the generated pattern
+echo generate_pattern_14();
+
 ?>
+
